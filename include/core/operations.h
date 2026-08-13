@@ -20,7 +20,7 @@
 #include "cpu.h"
 typedef void (*Instruction)(CPU* cpu, uint8_t operand);
 typedef struct {
-    bool broken;
+    bool empty;
     uint8_t code;
     uint8_t size;
     Instruction ins;
@@ -78,7 +78,7 @@ OpName opname[INS_SET_SIZE] = {
 
 typedef enum Args {
     REG,
-    NUMBER,
+    NUM,
     NOTHING
 };
 
@@ -89,6 +89,11 @@ typedef struct {
 } Expects;
 
 Expects ins_expect[INS_SET_SIZE] = {
-    [_NOP] = {NOTHING, NOTHING}
-}
+    [_NOP] = {NOTHING, NOTHING},
+    [_MOV] = {REG, NUM},
+    [_ADD] = {REG, REG},
+    [_SUB] = {REG, REG},
+    [_JMP] = {NUM, NOTHING},
+    [_SHOWREG] = {REG, NOTHING}
+};
 #endif

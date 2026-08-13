@@ -8,10 +8,17 @@ typedef struct {
     uint8_t value;
 } Operand;
 
+enum ParseType {
+    NON,
+    DIRECT,
+    INSTRUCT
+};
 typedef struct {
     Operation op;
     Operand ope1;
     Operand ope2;
+    uint8_t ptype;
+    uint8_t directive;
 } ParsedIns;
 
 typedef enum {
@@ -21,6 +28,12 @@ typedef enum {
     UNKNOWN_REGISTER,
     SYNTAX_ERROR,
     INVALID_OPCODE,
+    INVALID_ARGUMENT,
+    INVALID_NUMBER,
+    MISSING_INSTRUCTION,
+    MISSING_ARGUMENT,
+    MISSING_LINE,
+    OUT_OF_BOUNDS,
     TOO_MANY_OPERANDS
 } ParsingError;
 
