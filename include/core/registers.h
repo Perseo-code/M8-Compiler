@@ -1,8 +1,7 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
-#include "main.h"
-
-enum Register {
+#include <stdint.h>
+typedef enum Register {
     AR,
     BR,
     CR,
@@ -15,7 +14,7 @@ enum Register {
     L6,
     L7,
     REND
-};
+} Register;
 
 typedef struct {
     uint8_t r[REND];

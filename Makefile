@@ -1,13 +1,21 @@
 CC = gcc
-CFLAGS = -Iinclude -Iinclude/core
-SOURCE = $(shell find . -name "*.c")
-BUILD_DIR = build 
-BIN = $(SOURCE:.c=.o)
+CFLAGS = -Iinclude -Iinclude/core -g
 
-%.o: %.c
+BUILD_DIR = build
+BIN = masm
+
+SOURCE = $(shell find . -name "*.c")
+OBJECTS = $(SOURCE:%.c=$(BUILD_DIR)/%.o)
+
+$(BIN): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $@
+
+$(BUILD_DIR)/%.o: %.c
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+all: $(BIN)
 
-SRCODE: $(BIN)
-	mkdir -p $(BUILD_DIR)/core
-	$(CC) $(OBJS) -o M8 
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -f $(BIN)

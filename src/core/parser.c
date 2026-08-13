@@ -4,13 +4,15 @@
 uint64_t parser_position = 0;
 
 ParsedIns parse(ParsingError* error) {
-    ParsedIns result;
-    result.op.empty = true;
-    result.ope1.type = NONE;
-    result.ope2.type = NONE;
+    ParsedIns result = {
+        .op.empty = true,
+        .ope1.type = NONE,
+        .ope2.type = NONE,
+        .ptype = NON
+    };
     // We look at the list the lexer has built by itself, and go ahead by compiling with the encoder (my fav part honestly)
     for (; parser_position < token_count; parser_position++) {
-        switch (list[parser_position]->type) {
+        switch (list[parser_position].type) {
             case INSTRUCTION:
                 if (result.ptype != NON) {
                     *error = TOO_MANY_OPERANDS;
@@ -20,7 +22,7 @@ ParsedIns parse(ParsingError* error) {
                 OpName op;
                 bool broken = true;
                 for (int j = 0; j < INS_SET_SIZE; j++) {
-                    if (STREQ(list[parser_position]->literal, opname[j])) {
+                    if (STREQ(list[parser_position].literal, opname[j].name)) {
                         broken = false;
                         op = opname[j];
                         break;
@@ -38,15 +40,15 @@ ParsedIns parse(ParsingError* error) {
                     return (ParsedIns){};
                 }
                 uint16_t reg;
-                bool broken = true;
+                bool br = true;
                 for (int j = 0; j < REND; j++) {
-                    if (STREQ(list[parser_position]->literal, regss[j])) {
-                        reg = j; 
-                        broken = false;
+                    if (STREQ(list[parser_position].literal, regss[j])) {
+                        reg = j;  
+                        br = false;
                         break;
                     }
                 }
-                if (broken) {
+                if (br) {
                     *error = UNKNOWN_REGISTER;
                     return (ParsedIns){};
                 }
@@ -63,7 +65,7 @@ ParsedIns parse(ParsingError* error) {
                 result.ptype = DIRECT;
                 bool b = true;
                 for (int j = 0; j < DIR_SIZE; j++) {
-                    if (STREQ(list[parser_position]->literal, directives[j])) {
+                    if (STREQ(list[parser_position].literal, directives[j])) {
                         result.directive = j;
                         b = false;
                         break;
@@ -82,7 +84,7 @@ ParsedIns parse(ParsingError* error) {
                     return (ParsedIns){};
                 }
                 char* endptr;
-                uint64_t num = strtoul(list[parser_position]->literal, &endptr, 0);
+                uint64_t num = strtoul(list[parser_position].literal, &endptr, 0);
                 if (num >= 256) {
                     *error = OUT_OF_BOUNDS;
                     return (ParsedIns){};
@@ -96,18 +98,23 @@ ParsedIns parse(ParsingError* error) {
                 else if (result.ope2.type == NONE) result.ope2 = (Operand){NUMBER, num};
                 else {*error = TOO_MANY_OPERANDS; return (ParsedIns){};}
                 break;
-            case NEWLINE:
+            case NEWLINE: // Ressembles an OR (||) operator
+            case TEOF:
+                if (result.ptype == NON) {
+                    parser_position++;
+                    *error = OKAY;
+                    return (ParsedIns){};
+                }
+
+                // validate and return the instruction
                 switch (result.ptype) {
                     case DIRECT:
                         break;
                     case INSTRUCT:
                         if (result.op.empty) {*error = MISSING_INSTRUCTION; return (ParsedIns){};}
-                        uint8_t args1;
-                        uint8_t args2;
+                        Args args1 = NOTHING;
+                        Args args2 = NOTHING;
                         switch (result.ope1.type) {
-                            case NONE:
-                                args1 = NOTHING;
-                                break;
                             case REGISTER:
                                 args1 = REG;
                                 break;
@@ -121,9 +128,6 @@ ParsedIns parse(ParsingError* error) {
                         }
 
                         switch (result.ope2.type) {
-                            case NONE:
-                                args2 = NOTHING;
-                                break;
                             case REGISTER:
                                 args2 = REG;
                                 break;
@@ -139,11 +143,9 @@ ParsedIns parse(ParsingError* error) {
                         break;
                     default:
                         *error = OKAY;
+                        parser_position++;
                         return (ParsedIns){};
                 }
-                parser_position++;
-                *error = OKAY;
-                return result;
         }
     }
 

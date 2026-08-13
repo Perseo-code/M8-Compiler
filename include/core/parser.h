@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "operations.h"
 #include "registers.h"
+
 typedef struct {
     TokenType type;
     uint8_t value;
@@ -21,7 +22,7 @@ typedef struct {
     uint8_t directive;
 } ParsedIns;
 
-typedef enum {
+typedef enum ParsingError {
     OKAY,
     UNKNOWN_INSTRUCTION,
     UNKNOWN_DIRECTIVE,
@@ -38,4 +39,6 @@ typedef enum {
 } ParsingError;
 
 ParsedIns parse(ParsingError*);
+
+extern uint64_t parser_position;
 #endif

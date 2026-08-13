@@ -1,5 +1,6 @@
 #ifndef CPU_H
 #define CPU_H
+// Unused file (yet)
 #include "registers.h"
 typedef struct {
     Registers regs;

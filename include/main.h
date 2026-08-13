@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "operations.h"
 #include "registers.h"
-inline void init(CPU* cpu) {
-    cpu = malloc(sizeof(cpu));
-}
+#include "lexer.h"
+#include "parser.h"
+#include "encoder.h"
 #endif
