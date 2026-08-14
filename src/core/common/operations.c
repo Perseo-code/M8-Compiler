@@ -31,8 +31,8 @@ void showreg(CPU* cpu, GivenCommands cmd) {
 Operation OPS[INS_SET_SIZE] = {
     CREATEOP(nop, _NOP, 1),
     CREATEOP(mov, _MOV, 3),
-    CREATEOP(add, _ADD, 2),
-    CREATEOP(sub, _SUB, 2),
+    CREATEOP(add, _ADD, 3),
+    CREATEOP(sub, _SUB, 3),
     CREATEOP(jmp, _JMP, 2),
     CREATEOP(showreg, _SHOWREG, 2)
 };

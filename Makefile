@@ -2,7 +2,8 @@ CC = gcc
 CFLAGS = -Iinclude -Iinclude/core -Iinclude/core/common -Iinclude/core/masm -Iinclude/core/memulator -g
 
 BUILD_DIR = build
-BIN = $(BUILD_DIR)/masm
+NAME = masm
+BIN = $(BUILD_DIR)/$(NAME)
 SOURCE = $(shell find . -name "*.c")
 OBJECTS = $(SOURCE:%.c=$(BUILD_DIR)/%.o)
 
@@ -14,6 +15,9 @@ $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(BIN)
+
+install: all
+	mv $(BIN) /usr/bin/$(NAME)
 
 clean:
 	rm -rf $(BUILD_DIR)
