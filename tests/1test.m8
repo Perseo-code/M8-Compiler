@@ -1,1 +1,5 @@
 MOV L1, 48
+MOV L2, 17
+ADD L1, L2
+NOP
+sreg l1

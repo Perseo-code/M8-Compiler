@@ -54,11 +54,11 @@ TokenType identify(const char* data) {
         }
     }
 
-    printf("REND = %d\n", REND);
+    //printf("REND = %d\n", REND);
 
-    for (int i = 0; i < REND; i++) {
+    /*for (int i = 0; i < REND; i++) {
         printf("regss[%d] = %p \"%s\"\n", i, (void *)regss[i], regss[i]);
-    }
+    }*/
     for (int i = 0; i < REND; i++) {
         if (STREQ(data, regss[i])) {
             return REGISTER;

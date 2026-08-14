@@ -1,9 +1,8 @@
 CC = gcc
-CFLAGS = -Iinclude -Iinclude/core -g
+CFLAGS = -Iinclude -Iinclude/core -Iinclude/core/common -Iinclude/core/masm -Iinclude/core/memulator -g
 
 BUILD_DIR = build
 BIN = masm
-
 SOURCE = $(shell find . -name "*.c")
 OBJECTS = $(SOURCE:%.c=$(BUILD_DIR)/%.o)
 

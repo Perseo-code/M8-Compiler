@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
         printf("Usage: masm <input> <output>\n");
         return 1;
     }
-    printf("input: %s\n", argv[1]);
+    //printf("input: %s\n", argv[1]);
     FILE* filename = fopen(argv[1], "r");
     if (filename == NULL) {
         printf("Failed to open file %s", argv[1]);
@@ -37,19 +37,19 @@ int main(int argc, char* argv[]) {
         printf("Failed to create output file\n");
         return 1;
     }
-    printf("filesize = %ld\n", filesize);
+    /*printf("filesize = %ld\n", filesize);
     printf("read = %zu\n", read);
-    printf("buffer = \"%s\"\n", buffer);
+    printf("buffer = \"%s\"\n", buffer);*/
     lexer(buffer);
 
-    printf("token_count = %u\n", token_count);
+    //printf("token_count = %u\n", token_count);
 
-    for (uint32_t i = 0; i < token_count; i++) {
+    /*for (uint32_t i = 0; i < token_count; i++) {
         printf("Token %u: type=%d, literal=\"%s\"\n",
             i,
             list[i].type,
             list[i].literal);
-    }
+    }*/
     while (parser_position < token_count) {
         ParsingError error;
 

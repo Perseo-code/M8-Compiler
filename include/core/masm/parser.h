@@ -9,16 +9,16 @@ typedef struct {
     uint8_t value;
 } Operand;
 
-enum ParseType {
+typedef enum ParseType {
     NON,
     DIRECT,
     INSTRUCT
-};
+} ParseType;
 typedef struct {
     Operation op;
     Operand ope1;
     Operand ope2;
-    uint8_t ptype;
+    ParseType ptype;
     uint8_t directive;
 } ParsedIns;
 
@@ -38,7 +38,7 @@ typedef enum ParsingError {
     TOO_MANY_OPERANDS
 } ParsingError;
 
-ParsedIns parse(ParsingError*);
+ParsedIns parse(ParsingError*); 
 
 extern uint64_t parser_position;
 #endif

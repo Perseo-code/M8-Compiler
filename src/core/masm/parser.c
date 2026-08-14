@@ -1,6 +1,6 @@
 #include "parser.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 uint64_t parser_position = 0;
 
 ParsedIns parse(ParsingError* error) {
@@ -10,16 +10,21 @@ ParsedIns parse(ParsingError* error) {
         .ope2.type = NONE,
         .ptype = NON
     };
+    printf("NEW PARSE: ptype=%d\n", result.ptype);
     // We look at the list the lexer has built by itself, and go ahead by compiling with the encoder (my fav part honestly)
     for (; parser_position < token_count; parser_position++) {
         switch (list[parser_position].type) {
             case INSTRUCTION:
                 if (result.ptype != NON) {
+                    printf("TOO MANY: instruction ptype was %d\n", result.ptype);
                     *error = TOO_MANY_OPERANDS;
                     return (ParsedIns){};
                 }
                 result.ptype = INSTRUCT;
                 OpName op;
+                printf("INSTRUCTION: %s, ptype=%d\n",
+                    list[parser_position].literal,
+                    result.ptype);
                 bool broken = true;
                 for (int j = 0; j < INS_SET_SIZE; j++) {
                     if (STREQ(list[parser_position].literal, opname[j].name)) {
@@ -35,6 +40,10 @@ ParsedIns parse(ParsingError* error) {
                 result.op = OPS[op.inst];
                 break;
             case REGISTER:
+                printf("REGISTER: %s, ope1=%d, ope2=%d\n",
+                    list[parser_position].literal,
+                    result.ope1.type,
+                    result.ope2.type);
                 if (result.ptype != INSTRUCT) {
                     *error = INVALID_ARGUMENT;
                     return (ParsedIns){};
@@ -141,11 +150,10 @@ ParsedIns parse(ParsingError* error) {
                             return (ParsedIns){};
                         }
                         break;
-                    default:
-                        *error = OKAY;
-                        parser_position++;
-                        return (ParsedIns){};
                 }
+                *error = OKAY;
+                parser_position++;
+                return result;
         }
     }
 
