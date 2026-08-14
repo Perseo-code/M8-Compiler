@@ -1,10 +1,11 @@
 #ifndef INSTRUCTIONS
 #define INSTRUCTIONS
 #define INS_SET_SIZE 256
+#define OPNAME_SIZE 6
+#include "cpu.h"
 #define CALCSIZE(array) (sizeof(array) / sizeof((array)[0]))
 #define GETBITS(byte, bits, mask) ((byte >> bits) & mask) // If we need
 #define CREATEOP(fn, byte, size) [byte] = {false, byte, size, fn} 
-
 // Each instruction value
 #define _NOP 0x00
 #define _MOV 0x01
@@ -17,8 +18,10 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "cpu.h"
-typedef void (*Instruction)(CPU* cpu, uint8_t operand);
+
+typedef struct CPU CPU;
+typedef struct GivenCommands GivenCommands;
+typedef void (*Instruction)(CPU* cpu, GivenCommands);
 typedef struct {
     bool empty;
     uint8_t code;

@@ -1,30 +1,30 @@
 #include "operations.h"
 
-void nop(CPU* cpu, uint8_t operand) {}
-void mov(CPU* cpu, uint8_t reg) {
-    uint8_t value = cpu->memory[cpu->pc++];
+void nop(CPU* cpu, GivenCommands cmd) {}
+void mov(CPU* cpu, GivenCommands cmd) {
+    uint8_t value = cmd.operand2;
 
-    cpu->regs.r[reg] = value;
+    cpu->regs.r[cmd.operand1] = value;
 }
 
-void add(CPU* cpu, uint8_t reg) {
-    uint8_t destination = reg >> 4;
-    uint8_t source = reg & 0x0F;
+void add(CPU* cpu, GivenCommands cmd) {
+    uint8_t destination = cmd.operand1;
+    uint8_t source = cmd.operand2;
     cpu->regs.r[destination] += cpu->regs.r[source];
 }
 
-void sub(CPU* cpu, uint8_t reg) {
-    uint8_t reg1 = reg >> 4;
-    uint8_t reg2 = reg & 0x0F;
+void sub(CPU* cpu, GivenCommands cmd) {
+    uint8_t reg1 = cmd.operand1;
+    uint8_t reg2 = cmd.operand2;
     cpu->regs.r[AR] = cpu->regs.r[reg1] - cpu->regs.r[reg2];
 }
 
-void jmp(CPU* cpu, uint8_t address) {
-    cpu->pc = address;
+void jmp(CPU* cpu, GivenCommands cmd) {
+    cpu->pc = cmd.operand1;
 }
 
-void showreg(CPU* cpu, uint8_t reg) {
-    uint8_t type = reg >> 4;
+void showreg(CPU* cpu, GivenCommands cmd) {
+    uint8_t reg = cmd.operand1;
 }
 
 Operation OPS[INS_SET_SIZE] = {
@@ -36,7 +36,7 @@ Operation OPS[INS_SET_SIZE] = {
     CREATEOP(showreg, _SHOWREG, 1)
 };
 
-OpName opname[INS_SET_SIZE] = {
+OpName opname[OPNAME_SIZE] = {
     {"nop", _NOP},
     {"mov", _MOV},
     {"add", _ADD},

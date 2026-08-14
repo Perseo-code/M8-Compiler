@@ -48,7 +48,7 @@ bool is_number(const char* data) {
 }
 
 TokenType identify(const char* data) {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < OPNAME_SIZE; i++) {
         if (STREQ(data, opname[i].name)) {
             return INSTRUCTION;
         }
