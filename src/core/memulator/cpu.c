@@ -1,12 +1,12 @@
 #include "cpu.h"
-#define ACCESS_MEM() cpu->memory[cpu->pc]
+
 
 
 
 void execute(CPU* cpu) {
     while (cpu->pc < MEMORY_SIZE) {
-        Operation op = OPS[ACCESS_MEM()];
-        if (ACCESS_MEM() == op.code) {
+        Operation op = OPS[cpu->memory[cpu->pc]];
+        if (cpu->memory[cpu->pc] == op.code) {
             GivenCommands result;
             bool jmp = op.code == _JMP;
             result.operand1 = 0;

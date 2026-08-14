@@ -1,5 +1,5 @@
 #include "operations.h"
-
+#include <stdio.h>
 void nop(CPU* cpu, GivenCommands cmd) {}
 void mov(CPU* cpu, GivenCommands cmd) {
     uint8_t value = cmd.operand2;
@@ -24,7 +24,8 @@ void jmp(CPU* cpu, GivenCommands cmd) {
 }
 
 void showreg(CPU* cpu, GivenCommands cmd) {
-    uint8_t reg = cmd.operand1;
+    uint8_t reg = cpu->regs.r[cmd.operand1];
+    printf("%d \n", reg);
 }
 
 Operation OPS[INS_SET_SIZE] = {
@@ -33,7 +34,7 @@ Operation OPS[INS_SET_SIZE] = {
     CREATEOP(add, _ADD, 2),
     CREATEOP(sub, _SUB, 2),
     CREATEOP(jmp, _JMP, 2),
-    CREATEOP(showreg, _SHOWREG, 1)
+    CREATEOP(showreg, _SHOWREG, 2)
 };
 
 OpName opname[OPNAME_SIZE] = {

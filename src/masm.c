@@ -8,7 +8,7 @@ A program made to compile assembly using a custom architecture called M8
 
 
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
     if (argc < 3) {
         printf("Usage: masm <input> <output>\n");
         return 1;
@@ -37,19 +37,19 @@ int main(int argc, char* argv[]) {
         printf("Failed to create output file\n");
         return 1;
     }
-    /*printf("filesize = %ld\n", filesize);
-    printf("read = %zu\n", read);
-    printf("buffer = \"%s\"\n", buffer);*/
+    //printf("filesize = %ld\n", filesize);
+    //printf("read = %zu\n", read);
+    //printf("buffer = \"%s\"\n", buffer);
     lexer(buffer);
 
     //printf("token_count = %u\n", token_count);
 
-    /*for (uint32_t i = 0; i < token_count; i++) {
-        printf("Token %u: type=%d, literal=\"%s\"\n",
-            i,
-            list[i].type,
-            list[i].literal);
-    }*/
+    //for (uint32_t i = 0; i < token_count; i++) {
+    //    printf("Token %u: type=%d, literal=\"%s\"\n",
+    //        i,
+    //        list[i].type,
+    //        list[i].literal);
+    
     while (parser_position < token_count) {
         ParsingError error;
 
@@ -67,4 +67,36 @@ int main(int argc, char* argv[]) {
     }
     fclose(output);
     return 0;
+}*/
+
+int compiler(char* buffer, FILE* output) {
+    //printf("filesize = %ld\n", filesize);
+    //printf("read = %zu\n", read);
+    //printf("buffer = \"%s\"\n", buffer);
+    lexer(buffer);
+
+    //printf("token_count = %u\n", token_count);
+
+    //for (uint32_t i = 0; i < token_count; i++) {
+    //    printf("Token %u: type=%d, literal=\"%s\"\n",
+    //        i,
+    //        list[i].type,
+    //        list[i].literal);
+    
+    while (parser_position < token_count) {
+        ParsingError error;
+
+        ParsedIns parsed = parse(&error);
+        if (error != OKAY) {
+            return error;
+        }
+
+        if (parsed.ptype == NON)
+            break;
+        Encoded encoded = encoder(parsed);
+
+        fwrite(encoded.data, 1, encoded.size, output);
+    }
+    fclose(output);
+    return OKAY;
 }

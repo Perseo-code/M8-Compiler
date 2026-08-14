@@ -6,7 +6,7 @@
 #include "registers.h"
 typedef struct CPU {
     Registers regs;
-    uint8_t pc; // Program Counter
+    uint16_t pc; // Program Counter
     uint8_t memory[MEMORY_SIZE];
 } CPU;
 
