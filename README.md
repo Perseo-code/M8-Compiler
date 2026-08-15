@@ -14,3 +14,12 @@ NOP
 ADD AR, BR
 ```
 *NOTE*: this assembly language is also case insensitive.
+# Compilation
+To **compile** a file, you can do this;
+```
+masm in.m8 out.mout
+# Emulation
+To **emulate** a binary file, you have to use the flag `-e`, like this:
+```
+masm -e binary.mout
+```
